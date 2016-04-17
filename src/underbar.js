@@ -92,7 +92,7 @@
       if (test(e)) {
         passed.push(e);
       }
-    }
+    };
     _.each(collection, pushTest);
     return passed;
   };
@@ -101,6 +101,10 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    var notTest = function(e) {
+      return !test(e);
+    };
+    return _.filter(collection, notTest);
   };
 
   // Produce a duplicate-free version of the array.
