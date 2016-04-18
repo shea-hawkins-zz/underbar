@@ -311,6 +311,32 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var callInd = function(arg) {
+      var ind = -1;
+      for (var j = 0; j < argCalled.length; j++) {
+        if (JSON.stringify(arg) === JSON.stringify(argCalled[j])) {
+          ind = j;
+        }
+      }
+      return ind;
+    };
+    var argCalled = [];
+    var results = [];
+    return function() {
+      var argArray = [];
+      for (var i = 0; i < arguments.length; i++) {
+        argArray.push(arguments[i]);
+      }
+      var argInd = callInd(argArray);
+      if (argInd === -1) {
+        argCalled.push(argArray);
+        var result = func.apply(this, arguments);
+        results.push(result);
+        return result;
+      } else {
+        return results[argInd];
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
